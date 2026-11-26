@@ -1,0 +1,100 @@
+{
+  "timezone": "Europe/Moscow",
+  "menuText": "Трекер NFT подарков\n\n🎁 Вам доступен бесплатный тест на {trialHours} часа!\n\n• Мониторинг новых лотов\n• Информация о подарках и продавцах\n• Доступ к лотам в закрытой группе\n\nВыберите действие:",
+  "trialSeconds": 10800,
+  "vipTrialSeconds": 1500,
+  "plans": {
+    "standard": {
+      "label": "Обычная",
+      "stars": 200,
+      "seconds": 2592000,
+      "cooldown": 30
+    },
+    "vip": {
+      "label": "VIP",
+      "stars": 500,
+      "seconds": 2592000,
+      "cooldown": 5
+    }
+  },
+  "topics": [
+    {
+      "name": "парс",
+      "threadId": 2,
+      "min": 0,
+      "max": 100,
+      "tier": "standard",
+      "currency": "XTR",
+      "iconCustomEmojiId": "5474419165781597383"
+    },
+    {
+      "name": "ширп",
+      "threadId": 3,
+      "min": 100,
+      "max": 1000,
+      "tier": "standard",
+      "currency": "XTR",
+      "iconCustomEmojiId": "5305533376596326292"
+    },
+    {
+      "name": "средние",
+      "threadId": 4,
+      "min": 1000,
+      "max": 5000,
+      "tier": "standard",
+      "currency": "XTR",
+      "iconCustomEmojiId": "5370900395134592037"
+    },
+    {
+      "name": "дорогие",
+      "threadId": 5,
+      "min": 5000,
+      "max": 10000,
+      "tier": "vip",
+      "currency": "XTR",
+      "iconCustomEmojiId": "5303047209007232478"
+    },
+    {
+      "name": "премиум",
+      "threadId": 6,
+      "min": 10000,
+      "max": 1000000000,
+      "tier": "vip",
+      "currency": "XTR",
+      "iconCustomEmojiId": "5305380969681825315"
+    },
+    {
+      "name": "парс TON",
+      "threadId": 7,
+      "min": 0,
+      "max": 1000000000,
+      "tier": "standard",
+      "currency": "TON",
+      "iconCustomEmojiId": "5474419165781597383"
+    },
+    {
+      "name": "100% гои",
+      "threadId": 392,
+      "enabled": false,
+      "tier": "vip",
+      "iconCustomEmojiId": "5305345952813460799",
+      "createAutomatically": true
+    },
+    {
+      "name": "общаемся",
+      "threadId": 393,
+      "enabled": false,
+      "iconCustomEmojiId": "5875465628285931233",
+      "createAutomatically": true,
+      "tier": "standard"
+    },
+    {
+      "name": "новости",
+      "threadId": 394,
+      "enabled": false,
+      "iconCustomEmojiId": "5305691500112290856",
+      "createAutomatically": true,
+      "tier": "standard"
+    }
+  ]
+}

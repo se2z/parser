@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {Store} from '../src/store.js';
+import {Service} from '../src/service.js';
+const config=JSON.parse(readFileSync(new URL('../config.json',import.meta.url)));
+function setup(){const s=new Store(),calls=[];const tg={send:async(...a)=>{calls.push(['send',a]);return{message_id:100+calls.length}},call:async(...a)=>{calls.push(a);return{}}};const app=new Service(s,tg,config,{GROUP_ID:'-1001'});return {s,calls,app}}
+const lot=(id,age=0)=>({source:'telegram-market',externalId:id,slug:'Gift-1',name:'Gift',number:1,price:555,priceText:'555',currency:'XTR',giftUrl:'https://t.me/nft/Gift-1',observedAt:new Date(Date.now()-age).toISOString()});
+test('old queued listings are discarded instead of published as new',async()=>{const {s,calls,app}=setup();await app.ingest([lot('old',600000)]);await app.work();assert.equal(calls.length,0);assert.equal(s.one('SELECT status FROM lots').status,'stale');assert.equal(s.one('SELECT done FROM jobs').done,1);s.close()});
+test('newer versions supersede old prices in the pending publication queue',async()=>{const {s,calls,app}=setup();await app.ingest([lot('old'),{...lot('new'),price:600,priceText:'600'}]);await app.work();assert.equal(calls.filter(c=>c[0]==='send').length,1);assert.equal(s.one('SELECT lot_id FROM publications').lot_id,2);assert.equal(s.one('SELECT status FROM lots WHERE id=1').status,'superseded');s.close()});
+test('a real reprice refreshes the visible card before a second claim click',async()=>{const {s,calls,app}=setup();await app.ingest([lot('old')]);await app.work();await app.refreshLot(1,{...lot('new'),price:777,priceText:'777'});const last=calls.at(-1);assert.equal(last[0],'editMessageText');assert.ok(last[1].text.includes('777'));assert.equal(JSON.parse(s.one('SELECT data FROM lots WHERE id=1').data).price,777);s.close()});
+test('withdrawal removes the reservation button instead of letting every click fail again',async()=>{const {s,calls,app}=setup();await app.ingest([lot('old')]);await app.work();await app.refreshLot(1,null);assert.equal(s.one('SELECT status FROM lots').status,'withdrawn');const edit=calls.at(-1)[1];assert.equal(edit.reply_markup.inline_keyboard.flat().some(b=>b.callback_data?.startsWith('claim:')),false);s.close()});
+test('publication pacing never delays access links behind the market backlog',async()=>{const {s,app,calls}=setup();await app.ingest([lot('one'),{...lot('two'),slug:'Gift-2'}]);s.enqueue('access-link',{uid:5},'access');app.access=async()=>{calls.push(['access']);};await app.work();assert.equal(calls[0][0],'access');assert.equal(calls.filter(c=>c[0]==='send').length,1);s.close()});

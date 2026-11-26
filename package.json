@@ -1,0 +1,1 @@
+{"name":"gift-tracker","version":"1.0.0","private":true,"type":"module","engines":{"node":">=24.0.0"},"scripts":{"start":"node --use-env-proxy --env-file=.env src/main.js","test":"node --test tests/*.test.js","demo":"node src/demo.js"},"dependencies":{"@mtcute/node":"0.32.8","https-proxy-agent":"9.1.0","long":"5.3.2","ws":"8.23.0"}}
